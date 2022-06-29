@@ -1,0 +1,11 @@
+.volume .progressRange {
+  position: relative;
+  top: -21px;
+  left: 50px;
+}
+.volume .progressRange:hover {
+  height: 8px;
+}
+.volume .progressRange:hover .progressBar {
+  background: var(--primary-color) !important;
+}

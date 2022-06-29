@@ -1,0 +1,25 @@
+.progressRange {
+  height: 8px;
+  width: calc(100% - 30px);
+  margin: auto;
+  border-radius: 10px;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: rgba(202, 202, 202, 0.5);
+  transition: all 0.1s;
+}
+
+.progressRange:hover {
+  height: 10px;
+}
+
+.progressBar {
+  background: var(--primary-color);
+  width: 50%;
+  height: 100%;
+  border-radius: 10px;
+  transition: all 0.5s ease;
+}
