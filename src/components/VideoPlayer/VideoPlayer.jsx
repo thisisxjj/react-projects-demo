@@ -10,8 +10,37 @@ const VideoPlayer = () => {
   const videoRef = useRef(null)
   const videoControlRef = useRef(null)
 
+  let timer = null
+  let showControl = false
+  // 显示video control
+  function handleVideoControlShow() {
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    if (!showControl) {
+      showControl = true
+      videoControlRef && videoControlRef.current.handleMouseEnterAnimation({})
+    }
+
+    timer = setTimeout(() => {
+      handleVideoControlHide()
+    }, 2000)
+  }
+
+  // 隐藏video control
+  function handleVideoControlHide() {
+    showControl = false
+    videoControlRef && videoControlRef.current.handleMouseLeaveAnimation({})
+  }
+
   return (
-    <div className="player" ref={playerRef}>
+    <div
+      className="player"
+      ref={playerRef}
+      onMouseMove={handleVideoControlShow}
+      onMouseLeave={handleVideoControlHide}
+    >
       <VideoContext.Provider value={{ videoRef, playerRef }}>
         <video
           onClick={() =>

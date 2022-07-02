@@ -1,4 +1,11 @@
-import { useState, useImperativeHandle, forwardRef, useContext } from "react"
+import {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useContext,
+  useRef,
+} from "react"
+import { gsap } from "gsap"
 import ProgressBar from "../ProgressBar/ProgressBar"
 import PlayButton from "../PlayButton/PlayButton"
 import VolumeProgress from "../VolumeProgress/VolumeProgress"
@@ -18,6 +25,7 @@ const VideoControl = (props, ref) => {
   const [currentTime, setCurrentTime] = useState("")
   const [duration, setDuration] = useState("")
   const [fullscreen, isFullscreen] = useState(false)
+  const videoControlRef = useRef(null)
 
   const { videoRef: videoContext, playerRef: playerContext } =
     useContext(VideoContext)
@@ -109,16 +117,39 @@ const VideoControl = (props, ref) => {
     isFullscreen(!fullscreen)
   }
 
+  // 移入动画
+  function handleMouseEnterAnimation({ onComplete }) {
+    const des = { height: 95, opacity: 1, duration: 1, ease: "power2" }
+
+    if (onComplete) des["onComplete"] = onComplete
+
+    gsap.fromTo(videoControlRef.current, { height: 0, opacity: 0 }, des)
+  }
+
+  function handleMouseLeaveAnimation({ onComplete }) {
+    const des = { height: 0, opacity: 0, duration: 1, ease: "power2" }
+
+    if (onComplete) des["onComplete"] = onComplete
+
+    gsap.fromTo(
+      videoControlRef.current,
+      { height: 95, opacity: 1 },
+      { height: 0, opacity: 0, duration: 1, ease: "power2", onComplete }
+    )
+  }
+
   // 此处注意useImperativeHandle方法的的第一个参数是目标元素的ref引用
   useImperativeHandle(ref, () => ({
     // togglePlay 就是暴露给父组件的方法
     togglePlay,
     progressVideo,
     resetPlaying,
+    handleMouseEnterAnimation,
+    handleMouseLeaveAnimation,
   }))
 
   return (
-    <div className="controlContainer">
+    <div className="controlContainer" ref={videoControlRef}>
       <ProgressBar progress={progress} onClick={handleTimeProgressClick} />
       <div className="controlGroup">
         <div className="controlLeft">
