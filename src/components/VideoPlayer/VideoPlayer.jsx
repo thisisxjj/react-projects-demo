@@ -10,12 +10,14 @@ const VideoPlayer = () => {
   const videoRef = useRef(null)
   const videoControlRef = useRef(null)
 
-  let timer = null
-  let showControl = false
+  let timer = null // 定时器id
+  let showControl = false // 是否显示video control
+  let isOverControl = false // 是否在video control上
   // 显示video control
   function handleVideoControlShow() {
     if (timer) {
       clearTimeout(timer)
+      timer = null
     }
 
     if (!showControl) {
@@ -23,9 +25,11 @@ const VideoPlayer = () => {
       videoControlRef && videoControlRef.current.handleMouseEnterAnimation({})
     }
 
-    timer = setTimeout(() => {
-      handleVideoControlHide()
-    }, 2000)
+    if (!isOverControl) {
+      timer = setTimeout(() => {
+        handleVideoControlHide()
+      }, 2000)
+    }
   }
 
   // 隐藏video control
@@ -34,6 +38,13 @@ const VideoPlayer = () => {
     videoControlRef && videoControlRef.current.handleMouseLeaveAnimation({})
   }
 
+  function handleVideoControlEnter() {
+    isOverControl = true
+  }
+
+  function handleVideoControlLeave() {
+    isOverControl = false
+  }
   return (
     <div
       className="player"
@@ -60,7 +71,12 @@ const VideoPlayer = () => {
           autoPlay={false}
           className="video"
         ></video>
-        <VideoControl ref={videoControlRef} video={videoRef} />
+        <VideoControl
+          ref={videoControlRef}
+          video={videoRef}
+          onMouseEnter={handleVideoControlEnter}
+          onMouseLeave={handleVideoControlLeave}
+        />
       </VideoContext.Provider>
     </div>
   )

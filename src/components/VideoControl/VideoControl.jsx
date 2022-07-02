@@ -149,7 +149,12 @@ const VideoControl = (props, ref) => {
   }))
 
   return (
-    <div className="controlContainer" ref={videoControlRef}>
+    <div
+      className="controlContainer"
+      ref={videoControlRef}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
+    >
       <ProgressBar progress={progress} onClick={handleTimeProgressClick} />
       <div className="controlGroup">
         <div className="controlLeft">
